@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Iterable, Sequence
+from typing import Iterable
 
 
 @dataclass(frozen=True)
@@ -25,7 +25,7 @@ def _validate_positive(name: str, value: int) -> None:
 def simulate_game(
     dragon_health: int,
     dragon_attack: int,
-    avatars: Sequence[Avatar] | Iterable[Avatar],
+    avatars: Iterable[Avatar],
 ) -> GameResult:
     """Simulate a dragon fighting avatars one-by-one.
 
@@ -59,7 +59,7 @@ def simulate_game(
     return GameResult(True, defeated, health_left)
 
 
-def can_dragon_win(dragon_health: int, dragon_attack: int, avatars: Sequence[Avatar]) -> bool:
+def can_dragon_win(dragon_health: int, dragon_attack: int, avatars: Iterable[Avatar]) -> bool:
     return simulate_game(dragon_health, dragon_attack, avatars).dragon_won
 
 
@@ -79,16 +79,23 @@ def solve() -> None:
 
     data = sys.stdin.read().strip().split()
     if not data:
-        return
+        raise ValueError("Input cannot be empty")
 
-    it = iter(data)
-    dragon_health = int(next(it))
-    dragon_attack = int(next(it))
-    total_avatars = int(next(it))
+    try:
+        it = iter(data)
+        dragon_health = int(next(it))
+        dragon_attack = int(next(it))
+        total_avatars = int(next(it))
 
-    avatars = []
-    for _ in range(total_avatars):
-        avatars.append(Avatar(int(next(it)), int(next(it))))
+        avatars = []
+        for _ in range(total_avatars):
+            avatars.append(Avatar(int(next(it)), int(next(it))))
+    except (StopIteration, ValueError):
+        raise ValueError(
+            "Invalid input format. Expected: "
+            "'dragon_health dragon_attack', then avatar count, then "
+            "'avatar_health avatar_attack' repeated."
+        ) from None
 
     print("DRAGON" if can_dragon_win(dragon_health, dragon_attack, avatars) else "AVATARS")
 

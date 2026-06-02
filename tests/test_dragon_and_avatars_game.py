@@ -1,6 +1,8 @@
 import unittest
+from io import StringIO
+from unittest.mock import patch
 
-from dragon_and_avatars_game import Avatar, can_dragon_win, simulate_game
+from dragon_and_avatars_game import Avatar, can_dragon_win, simulate_game, solve
 
 
 class DragonAndAvatarsGameTests(unittest.TestCase):
@@ -26,8 +28,24 @@ class DragonAndAvatarsGameTests(unittest.TestCase):
         self.assertTrue(can_dragon_win(10, 10, [Avatar(health=3, attack=2)]))
 
     def test_invalid_values_raise(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "dragon_health must be greater than 0"):
             simulate_game(dragon_health=0, dragon_attack=1, avatars=[])
+        with self.assertRaisesRegex(ValueError, "dragon_attack must be greater than 0"):
+            simulate_game(dragon_health=1, dragon_attack=0, avatars=[])
+        with self.assertRaisesRegex(ValueError, "avatar.health must be greater than 0"):
+            simulate_game(dragon_health=1, dragon_attack=1, avatars=[Avatar(health=0, attack=1)])
+        with self.assertRaisesRegex(ValueError, "avatar.attack must be greater than 0"):
+            simulate_game(dragon_health=1, dragon_attack=1, avatars=[Avatar(health=1, attack=0)])
+
+    def test_solve_raises_for_incomplete_avatar_data(self):
+        with patch("sys.stdin", StringIO("10 2 1 5")):
+            with self.assertRaisesRegex(ValueError, "Invalid input format. Expected:"):
+                solve()
+
+    def test_solve_raises_for_empty_input(self):
+        with patch("sys.stdin", StringIO("")):
+            with self.assertRaises(ValueError):
+                solve()
 
 
 if __name__ == "__main__":
