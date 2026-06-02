@@ -47,6 +47,11 @@ class DragonAndAvatarsGameTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 solve()
 
+    def test_solve_prints_expected_winner(self):
+        stdin = io.StringIO("12 3\n2\n3 2\n4 1\n")
+        with patch("sys.stdin", stdin), io.StringIO() as buf, redirect_stdout(buf):
+            solve()
+            self.assertEqual(buf.getvalue().strip(), "DRAGON")
 
 if __name__ == "__main__":
     unittest.main()
