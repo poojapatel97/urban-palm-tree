@@ -1,0 +1,49 @@
+{
+  "version": "1.0.0",
+  "defaultTierByHardwareClass": {
+    "minimum": "low",
+    "recommended": "medium",
+    "highEnd": "high"
+  },
+  "presets": {
+    "low": {
+      "targetResolutionScale": 0.75,
+      "textureQuality": "low",
+      "shadowQuality": "low",
+      "effectsQuality": "low",
+      "antiAliasing": "fxaa",
+      "ambientOcclusion": false,
+      "volumetrics": false,
+      "vsync": true,
+      "frameRateCap": 60
+    },
+    "medium": {
+      "targetResolutionScale": 1.0,
+      "textureQuality": "medium",
+      "shadowQuality": "medium",
+      "effectsQuality": "medium",
+      "antiAliasing": "taa",
+      "ambientOcclusion": true,
+      "volumetrics": false,
+      "vsync": true,
+      "frameRateCap": 60
+    },
+    "high": {
+      "targetResolutionScale": 1.0,
+      "textureQuality": "high",
+      "shadowQuality": "high",
+      "effectsQuality": "high",
+      "antiAliasing": "taa",
+      "ambientOcclusion": true,
+      "volumetrics": true,
+      "vsync": true,
+      "frameRateCap": 120
+    }
+  },
+  "selectionRules": {
+    "deterministic": true,
+    "fallbackPreset": "low",
+    "onUnknownHardwareClass": "low",
+    "userOverrideAllowed": true
+  }
+}
